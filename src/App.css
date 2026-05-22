@@ -1,0 +1,190 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100dvh;
+}
+
+.app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 16px;
+}
+
+header {
+  text-align: center;
+  padding: 28px 0 16px;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #f8fafc;
+}
+
+.subtitle {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  max-width: 380px;
+  padding-bottom: 24px;
+}
+
+/* Note */
+.note-display {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  transition: color 0.2s;
+  color: #94a3b8;
+  line-height: 1;
+}
+
+.note-display.in-tune {
+  color: #22c55e;
+}
+
+.note-name {
+  font-size: 5rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: inherit;
+}
+
+.note-name.dim {
+  color: #334155;
+}
+
+.note-octave {
+  font-size: 2rem;
+  font-weight: 600;
+  padding-bottom: 10px;
+  color: #64748b;
+}
+
+/* Hz */
+.hz-display {
+  font-size: 1.4rem;
+  font-weight: 500;
+  font-family: 'Courier New', monospace;
+  color: #cbd5e1;
+  letter-spacing: 0.03em;
+}
+
+/* Needle */
+.needle-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Badge */
+.badge {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 999px;
+  padding: 4px 18px;
+  opacity: 0;
+  transition: opacity 0.25s;
+  pointer-events: none;
+}
+
+.badge.visible {
+  opacity: 1;
+}
+
+/* Volume bar */
+.vol-bar-wrap {
+  width: 100%;
+  height: 6px;
+  background: #1e293b;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.vol-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #22c55e);
+  border-radius: 99px;
+  transition: width 0.05s linear;
+}
+
+/* Error */
+.error {
+  color: #ef4444;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* Button */
+.btn {
+  width: 100%;
+  max-width: 260px;
+  padding: 14px 0;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-start {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.btn-start:hover {
+  background: #2563eb;
+}
+
+.btn-stop {
+  background: #1e293b;
+  color: #ef4444;
+  border: 1.5px solid #ef4444;
+}
+
+.btn-stop:hover {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: #475569;
+  text-align: center;
+}
+
+footer {
+  padding: 16px 0 24px;
+  color: #334155;
+  font-size: 0.78rem;
+  text-align: center;
+}
