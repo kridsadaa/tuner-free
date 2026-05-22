@@ -2,7 +2,9 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { detectPitch, frequencyToNote, type NoteInfo } from './pitchDetector';
 
 const FFT_SIZE = 4096;
-const SMOOTH_SIZE = 7; // median over last N pitches
+const MEDIAN_SIZE = 9;   // median window
+const LOCK_FRAMES = 4;   // frames of same note before switching
+const EMA_ALPHA = 0.25;  // cents smoothing (lower = smoother needle)
 
 function median(arr: number[]): number {
   const sorted = [...arr].sort((a, b) => a - b);
@@ -14,13 +16,18 @@ export function useMicrophone() {
   const [listening, setListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [volume, setVolume] = useState(0);
+  const [analyserNode, setAnalyserNode] = useState<AnalyserNode | null>(null);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const rafRef = useRef<number>(0);
   const bufferRef = useRef<Float32Array<ArrayBuffer>>(new Float32Array(FFT_SIZE));
+
+  // stability state
   const pitchHistoryRef = useRef<number[]>([]);
+  const smoothCentsRef = useRef<number>(0);
+  const currentNoteKeyRef = useRef<string>('');          // "C4", "D#3" etc
+  const pendingRef = useRef<{ key: string; count: number } | null>(null);
 
   const stop = useCallback(() => {
     cancelAnimationFrame(rafRef.current);
@@ -29,6 +36,10 @@ export function useMicrophone() {
     audioCtxRef.current = null;
     streamRef.current = null;
     pitchHistoryRef.current = [];
+    smoothCentsRef.current = 0;
+    currentNoteKeyRef.current = '';
+    pendingRef.current = null;
+    setAnalyserNode(null);
     setListening(false);
     setNote(null);
     setVolume(0);
@@ -47,11 +58,10 @@ export function useMicrophone() {
 
       const analyser = ctx.createAnalyser();
       analyser.fftSize = FFT_SIZE;
-      analyserRef.current = analyser;
+      analyser.smoothingTimeConstant = 0.5;
 
-      const source = ctx.createMediaStreamSource(stream);
-      source.connect(analyser);
-
+      ctx.createMediaStreamSource(stream).connect(analyser);
+      setAnalyserNode(analyser);
       setListening(true);
 
       const tick = () => {
@@ -63,18 +73,43 @@ export function useMicrophone() {
         const vol = Math.sqrt(rms / bufferRef.current.length);
         setVolume(vol);
 
-        if (vol > 0.01) {
+        if (vol > 0.012) {
           const freq = detectPitch(bufferRef.current, ctx.sampleRate);
           if (freq !== null) {
-            const history = pitchHistoryRef.current;
-            history.push(freq);
-            if (history.length > SMOOTH_SIZE) history.shift();
-            const smoothed = median(history);
-            setNote(frequencyToNote(smoothed));
+            // median smoothing on frequency
+            const hist = pitchHistoryRef.current;
+            hist.push(freq);
+            if (hist.length > MEDIAN_SIZE) hist.shift();
+            const smoothHz = median(hist);
+            const detected = frequencyToNote(smoothHz);
+            const key = `${detected.note}${detected.octave}`;
+
+            if (key === currentNoteKeyRef.current) {
+              // same note — smooth the cents with EMA
+              smoothCentsRef.current =
+                EMA_ALPHA * detected.cents + (1 - EMA_ALPHA) * smoothCentsRef.current;
+              setNote({ ...detected, cents: smoothCentsRef.current });
+              pendingRef.current = null;
+            } else {
+              // different note — require LOCK_FRAMES consecutive detections
+              if (pendingRef.current?.key === key) {
+                pendingRef.current.count++;
+                if (pendingRef.current.count >= LOCK_FRAMES) {
+                  smoothCentsRef.current = detected.cents;
+                  currentNoteKeyRef.current = key;
+                  setNote({ ...detected, cents: smoothCentsRef.current });
+                  pendingRef.current = null;
+                }
+              } else {
+                pendingRef.current = { key, count: 1 };
+              }
+            }
           }
         } else {
-          // silence — clear history so needle resets fast on next note
+          // silence — reset
           pitchHistoryRef.current = [];
+          pendingRef.current = null;
+          currentNoteKeyRef.current = '';
         }
 
         rafRef.current = requestAnimationFrame(tick);
@@ -88,5 +123,5 @@ export function useMicrophone() {
 
   useEffect(() => () => stop(), [stop]);
 
-  return { note, listening, error, volume, start, stop };
+  return { note, listening, error, volume, analyserNode, start, stop };
 }

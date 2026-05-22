@@ -1,9 +1,10 @@
 import { useMicrophone } from './useMicrophone';
 import { Needle } from './Needle';
+import { Waveform } from './Waveform';
 import './App.css';
 
 export default function App() {
-  const { note, listening, error, volume, start, stop } = useMicrophone();
+  const { note, listening, error, volume, analyserNode, start, stop } = useMicrophone();
 
   const inTune = note !== null && Math.abs(note.cents) < 5;
 
@@ -41,6 +42,9 @@ export default function App() {
         <div className={`badge${inTune ? ' visible' : ''}`}>
           IN TUNE ✓
         </div>
+
+        {/* Waveform */}
+        <Waveform analyser={analyserNode} />
 
         {/* Volume bar */}
         <div className="vol-bar-wrap">
