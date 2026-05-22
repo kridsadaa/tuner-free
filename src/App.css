@@ -188,3 +188,134 @@ footer {
   font-size: 0.78rem;
   text-align: center;
 }
+
+/* Mode toggle */
+.mode-toggle {
+  display: flex;
+  background: #1e293b;
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 8px 24px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748b;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.mode-btn.active {
+  background: #334155;
+  color: #f1f5f9;
+}
+
+/* Tuning selector */
+.tuning-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  width: 100%;
+}
+
+.tuning-btn {
+  padding: 7px 14px;
+  border: 1.5px solid #334155;
+  border-radius: 8px;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.tuning-btn.active {
+  border-color: #3b82f6;
+  color: #60a5fa;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+/* String cards */
+.string-cards {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.string-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 10px;
+  border-radius: 12px;
+  border: 1.5px solid #1e293b;
+  background: #0f172a;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.string-card.active {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.string-card.in-tune {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.06);
+}
+
+.string-label {
+  font-size: 0.72rem;
+  color: #475569;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.string-note {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #94a3b8;
+  line-height: 1;
+}
+
+.string-card.active .string-note {
+  color: #93c5fd;
+}
+
+.string-card.in-tune .string-note {
+  color: #4ade80;
+}
+
+.string-hz {
+  font-size: 0.72rem;
+  color: #334155;
+  font-family: monospace;
+}
+
+.string-cents {
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: monospace;
+  color: #64748b;
+  min-height: 1.2em;
+}
+
+.string-card.active .string-cents {
+  color: #93c5fd;
+}
+
+.string-card.in-tune .string-cents {
+  color: #4ade80;
+}
