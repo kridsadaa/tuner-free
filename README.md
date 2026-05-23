@@ -1,73 +1,100 @@
-# React + TypeScript + Vite
+# 🎵 Tuner Free
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Free online chromatic instrument tuner — no ads, no sign-up, no downloads.
 
-Currently, two official plugins are available:
+**Live:** [https://tuner-free.vercel.app/](https://tuner-free.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 🎸 **Guitar** — Standard (E A D G B e) and Drop D tuning
+- 🎻 **Violin** — Standard (G D A E) tuning
+- 🎸 **Bass** — Standard (E A D G) tuning
+- 🎵 **Ukulele** — Standard High-G tuning
+- 🎻 **Cello** — Standard (C G D A) tuning
+- 🇹🇭 **Thai instruments** — ซออู้ (4 tunings), ซอด้วง, ซอสามสาย
+- 🎵 **Chromatic mode** — works for any instrument
+- 🎛️ **Metronome** — 40–208 BPM
+- 📊 **Stability chart** — track your intonation over time
+- 🖥️ **Stage Mode** — large display for live performance
+- 🔒 **Privacy first** — all audio processed locally, nothing sent to any server
+- ⚡ **Reference pitch calibration** — A4 from 410–450 Hz
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+| Tool | Description |
+|---|---|
+| [React](https://react.dev/) | UI framework |
+| [TypeScript](https://www.typescriptlang.org/) | Type safety |
+| [Vite](https://vitejs.dev/) | Build tool & dev server |
+| [Pitchy](https://github.com/ianprime0509/pitchy) | Pitch detection algorithm |
+| [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) | Real-time audio processing |
+| [Vercel](https://vercel.com/) | Hosting & deployment |
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) v18+
+- npm
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/kridsadaa/tuner-free.git
+cd tuner-free
+
+# Install dependencies
+npm install
+
+# Start the dev server
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Build
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
 ```
+
+---
+
+## Project Structure
+
+```
+src/
+├── App.tsx           # Main app component
+├── App.css           # Global styles
+├── useMicrophone.ts  # Microphone & pitch detection hook
+├── tunings.ts        # Instrument tuning definitions
+├── audioOutput.ts    # Tone & metronome audio output
+├── Needle.tsx        # SVG tuner needle component
+├── Waveform.tsx      # Real-time waveform visualizer
+└── StabilityChart.tsx # Cents stability over time chart
+```
+
+---
+
+## Contributing
+
+Pull requests are welcome! For major changes, please open an issue first to discuss what you'd like to change.
+
+---
+
+## Author
+
+**Kridsada** — [LinkedIn](https://www.linkedin.com/in/kridsada-bunta/)
+
+---
+
+## License
+
+[MIT](LICENSE)
