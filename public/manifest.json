@@ -1,0 +1,28 @@
+{
+  "name": "Tuner Free",
+  "short_name": "Tuner Free",
+  "description": "Free online chromatic tuner for Guitar, Violin, Bass, Ukulele, Cello, and Thai instruments. No ads, real-time pitch detection.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#2f81f7",
+  "orientation": "portrait-primary",
+  "lang": "en",
+  "categories": ["music", "utilities"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "label": "Tuner Free — Free Online Chromatic Tuner"
+    }
+  ]
+}
