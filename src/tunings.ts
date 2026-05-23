@@ -56,6 +56,35 @@ export const INSTRUMENTS: Instrument[] = [
     ],
   },
   {
+    id: 'sao-duang',
+    name: 'ซอด้วง',
+    tunings: [
+      {
+        id: 'duang-std',
+        name: 'Standard',
+        strings: [
+          { label: 'สาย 1', note: 'D4', hz: 293.66 },
+          { label: 'สาย 2', note: 'A4', hz: 440.00 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'sao-sam-sai',
+    name: 'ซอสามสาย',
+    tunings: [
+      {
+        id: 'sam-sai-std',
+        name: 'Standard',
+        strings: [
+          { label: 'สาย 1', note: 'G2', hz: 98.00 },
+          { label: 'สาย 2', note: 'D3', hz: 146.83 },
+          { label: 'สาย 3', note: 'A3', hz: 220.00 },
+        ],
+      },
+    ],
+  },
+  {
     id: 'guitar',
     name: 'Guitar',
     tunings: [
@@ -102,6 +131,22 @@ export const INSTRUMENTS: Instrument[] = [
     ],
   },
   {
+    id: 'cello',
+    name: 'Cello',
+    tunings: [
+      {
+        id: 'cello-std',
+        name: 'Standard',
+        strings: [
+          { label: 'C', note: 'C2', hz: 65.41 },
+          { label: 'G', note: 'G2', hz: 98.00 },
+          { label: 'D', note: 'D3', hz: 146.83 },
+          { label: 'A', note: 'A3', hz: 220.00 },
+        ],
+      },
+    ],
+  },
+  {
     id: 'bass',
     name: 'Bass',
     tunings: [
@@ -140,13 +185,15 @@ export interface MatchResult {
   cents: number;
 }
 
-export function matchString(hz: number, tuning: Tuning): MatchResult {
+export function matchString(hz: number, tuning: Tuning, referenceA4: number = 440): MatchResult {
   let closestIndex = 0;
   let minDiff = Infinity;
   let resultCents = 0;
 
   tuning.strings.forEach((s, i) => {
-    const cents = 1200 * Math.log2(hz / s.hz);
+    // Adjust the target frequency based on referenceA4
+    const targetHz = s.hz * (referenceA4 / 440);
+    const cents = 1200 * Math.log2(hz / targetHz);
     if (Math.abs(cents) < minDiff) {
       minDiff = Math.abs(cents);
       closestIndex = i;

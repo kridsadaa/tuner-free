@@ -21,8 +21,8 @@ export function detectPitch(buffer: Float32Array, sampleRate: number): number | 
   return pitch;
 }
 
-export function frequencyToNote(hz: number): NoteInfo {
-  const semitones = 12 * Math.log2(hz / 440);
+export function frequencyToNote(hz: number, referenceA4: number = 440): NoteInfo {
+  const semitones = 12 * Math.log2(hz / referenceA4);
   const rounded = Math.round(semitones);
   const cents = (semitones - rounded) * 100;
   const midi = rounded + 69;

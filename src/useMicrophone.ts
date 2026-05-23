@@ -11,8 +11,9 @@ function median(arr: number[]): number {
   return sorted[Math.floor(sorted.length / 2)];
 }
 
-export function useMicrophone() {
+export function useMicrophone(referenceA4: number = 440) {
   const [note, setNote] = useState<NoteInfo | null>(null);
+  const [centsHistory, setCentsHistory] = useState<number[]>([]);
   const [listening, setListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [volume, setVolume] = useState(0);
@@ -28,6 +29,11 @@ export function useMicrophone() {
   const smoothCentsRef = useRef<number>(0);
   const currentNoteKeyRef = useRef<string>('');          // "C4", "D#3" etc
   const pendingRef = useRef<{ key: string; count: number } | null>(null);
+  const centsHistoryArrRef = useRef<number[]>([]);
+
+  // We need to keep referenceA4 in a ref so the requestAnimationFrame closure always has the latest value
+  const a4Ref = useRef(referenceA4);
+  a4Ref.current = referenceA4;
 
   const stop = useCallback(() => {
     cancelAnimationFrame(rafRef.current);
@@ -39,10 +45,12 @@ export function useMicrophone() {
     smoothCentsRef.current = 0;
     currentNoteKeyRef.current = '';
     pendingRef.current = null;
+    centsHistoryArrRef.current = [];
     setAnalyserNode(null);
     setListening(false);
     setNote(null);
     setVolume(0);
+    setCentsHistory([]);
   }, []);
 
   const start = useCallback(async () => {
@@ -81,14 +89,17 @@ export function useMicrophone() {
             hist.push(freq);
             if (hist.length > MEDIAN_SIZE) hist.shift();
             const smoothHz = median(hist);
-            const detected = frequencyToNote(smoothHz);
+            const detected = frequencyToNote(smoothHz, a4Ref.current);
             const key = `${detected.note}${detected.octave}`;
+
+            let finalCents = detected.cents;
 
             if (key === currentNoteKeyRef.current) {
               // same note — smooth the cents with EMA
               smoothCentsRef.current =
                 EMA_ALPHA * detected.cents + (1 - EMA_ALPHA) * smoothCentsRef.current;
-              setNote({ ...detected, cents: smoothCentsRef.current });
+              finalCents = smoothCentsRef.current;
+              setNote({ ...detected, cents: finalCents });
               pendingRef.current = null;
             } else {
               // different note — require LOCK_FRAMES consecutive detections
@@ -96,20 +107,32 @@ export function useMicrophone() {
                 pendingRef.current.count++;
                 if (pendingRef.current.count >= LOCK_FRAMES) {
                   smoothCentsRef.current = detected.cents;
+                  finalCents = smoothCentsRef.current;
                   currentNoteKeyRef.current = key;
-                  setNote({ ...detected, cents: smoothCentsRef.current });
+                  setNote({ ...detected, cents: finalCents });
                   pendingRef.current = null;
                 }
               } else {
                 pendingRef.current = { key, count: 1 };
               }
             }
+
+            // Update history
+            const cHist = centsHistoryArrRef.current;
+            cHist.push(finalCents);
+            if (cHist.length > 100) cHist.shift();
+            setCentsHistory([...cHist]);
           }
         } else {
           // silence — reset
           pitchHistoryRef.current = [];
           pendingRef.current = null;
           currentNoteKeyRef.current = '';
+          
+          if (centsHistoryArrRef.current.length > 0) {
+            centsHistoryArrRef.current = [];
+            setCentsHistory([]);
+          }
         }
 
         rafRef.current = requestAnimationFrame(tick);
@@ -123,5 +146,5 @@ export function useMicrophone() {
 
   useEffect(() => () => stop(), [stop]);
 
-  return { note, listening, error, volume, analyserNode, start, stop };
+  return { note, centsHistory, listening, error, volume, analyserNode, start, stop };
 }
