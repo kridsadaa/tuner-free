@@ -3,51 +3,145 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <!-- Primary Meta Tags -->
-    <title>Tuner Free — Online Instrument Tuner (Guitar, Violin, Sao U)</title>
-    <meta name="title" content="Tuner Free — Online Instrument Tuner (Guitar, Violin, Sao U)" />
-    <meta name="description" content="Accurate, free online chromatic tuner for Guitar, Violin, Bass, Ukulele, and Thai Sao U. No ads, client-side processing, works in your browser." />
-    <meta name="keywords" content="tuner, instrument tuner, online tuner, guitar tuner, violin tuner, sao u tuner, chromatic tuner, free tuner" />
-    <meta name="author" content="Tuner Free Team" />
+    <title>Tuner Free — Free Online Chromatic Tuner for Guitar, Violin, Bass & Thai Instruments</title>
+    <meta name="title" content="Tuner Free — Free Online Chromatic Tuner for Guitar, Violin, Bass & Thai Instruments" />
+    <meta name="description" content="Free online chromatic tuner for Guitar, Violin, Bass, Ukulele, Cello, and Thai instruments (ซออู้, ซอด้วง, ซอสามสาย). No ads, real-time pitch detection, works in any browser." />
+    <meta name="keywords" content="online tuner, free tuner, guitar tuner, violin tuner, bass tuner, chromatic tuner, ukulele tuner, cello tuner, instrument tuner, sao u tuner, ซออู้, ซอด้วง, Thai instrument tuner, pitch detector, microphone tuner" />
+    <meta name="author" content="Tuner Free" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="application-name" content="Tuner Free" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://tuner-free.vercel.app/" />
+
+    <!-- hreflang for multilingual content (Thai instruments) -->
+    <link rel="alternate" hreflang="en" href="https://tuner-free.vercel.app/" />
+    <link rel="alternate" hreflang="th" href="https://tuner-free.vercel.app/" />
+    <link rel="alternate" hreflang="x-default" href="https://tuner-free.vercel.app/" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://tuner-free.vercel.app/" />
-    <meta property="og:title" content="Tuner Free — Online Instrument Tuner" />
-    <meta property="og:description" content="High-precision chromatic tuner for all instruments. Free, no ads, works offline." />
-    <meta property="og:image" content="/assets/hero.png" />
+    <meta property="og:title" content="Tuner Free — Free Online Chromatic Tuner" />
+    <meta property="og:description" content="High-precision chromatic tuner for Guitar, Violin, Bass, Ukulele, Cello, and Thai instruments. Free, no ads, works in any browser." />
+    <meta property="og:image" content="https://tuner-free.vercel.app/assets/hero.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Tuner Free" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://tuner-free.vercel.app/" />
-    <meta property="twitter:title" content="Tuner Free — Online Instrument Tuner" />
-    <meta property="twitter:description" content="High-precision chromatic tuner for all instruments. Free, no ads, works offline." />
-    <meta property="twitter:image" content="/assets/hero.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://tuner-free.vercel.app/" />
+    <meta name="twitter:title" content="Tuner Free — Free Online Chromatic Tuner" />
+    <meta name="twitter:description" content="High-precision chromatic tuner for Guitar, Violin, Bass, Ukulele, Cello, and Thai instruments. Free, no ads." />
+    <meta name="twitter:image" content="https://tuner-free.vercel.app/assets/hero.png" />
 
-    <!-- Structured Data (JSON-LD) -->
+    <!-- Structured Data: WebApplication -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Tuner Free",
-        "url": "https://tuner-free.vercel.app/",
-        "description": "Accurate, free online chromatic tuner for Guitar, Violin, Bass, Ukulele, and Thai Sao U.",
-        "applicationCategory": "MusicApplication",
-        "operatingSystem": "Web",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "featureList": [
-          "Chromatic Tuning",
-          "Instrument Specific Modes (Guitar, Violin, Sao U)",
-          "Real-time Waveform Visualization",
-          "High-precision Pitch Detection"
-        ]
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Tuner Free",
+      "url": "https://tuner-free.vercel.app/",
+      "description": "Free online chromatic tuner for Guitar, Violin, Bass, Ukulele, Cello, and Thai instruments (Sao U, Sao Duang, Sao Sam Sai). Real-time pitch detection with no ads.",
+      "applicationCategory": "MusicApplication",
+      "operatingSystem": "Web",
+      "browserRequirements": "Requires a browser with Web Audio API and microphone access",
+      "inLanguage": ["en", "th"],
+      "isAccessibleForFree": true,
+      "keywords": "online tuner, guitar tuner, violin tuner, chromatic tuner, Thai instrument tuner",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Chromatic tuning for any instrument",
+        "Guitar Standard and Drop D tuning",
+        "Violin Standard tuning",
+        "Bass Standard tuning",
+        "Ukulele Standard (High G) tuning",
+        "Cello Standard tuning",
+        "Thai Sao U (ซออู้) tuning — Piang Or, Klang, Nok, Nai",
+        "Thai Sao Duang (ซอด้วง) tuning",
+        "Thai Sao Sam Sai (ซอสามสาย) tuning",
+        "Real-time waveform visualization",
+        "Stability chart for intonation tracking",
+        "Built-in metronome (40–208 BPM)",
+        "Reference pitch A4 calibration (410–450 Hz)",
+        "Stage Mode for large display",
+        "All audio processed locally — no data sent to server"
+      ],
+      "creator": {
+        "@type": "Organization",
+        "name": "Tuner Free"
       }
+    }
+    </script>
+
+    <!-- Structured Data: FAQPage (for Rich Snippets) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is Tuner Free really free to use?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Tuner Free is completely free. There are no ads, no subscriptions, and no sign-up required. Just open the website and start tuning."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Tuner Free work on mobile?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Tuner Free works on all modern browsers including mobile browsers on iOS and Android. Just allow microphone access when prompted."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Tuner Free send my audio to a server?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. All audio processing happens entirely on your device using the Web Audio API. Your microphone audio is never sent to any server, ensuring complete privacy."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which instruments does Tuner Free support?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tuner Free supports Guitar (Standard and Drop D), Violin, Bass, Ukulele, Cello, and Thai classical instruments including ซออู้ (Sao U), ซอด้วง (Sao Duang), and ซอสามสาย (Sao Sam Sai). It also has a chromatic mode for any other instrument."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I tune Thai instruments with Tuner Free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! Tuner Free specializes in Thai classical instruments. It supports ซออู้ (Sao U) in 4 tunings: ทางเพียงออ, ทางกลาง, ทางนอก, and ทางใน. It also supports ซอด้วง (Sao Duang) and ซอสามสาย (Sao Sam Sai)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How accurate is Tuner Free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tuner Free uses the Pitchy pitch detection algorithm which provides accuracy within 1 cent. It also shows a stability chart so you can track how stable your pitch is over time."
+          }
+        }
+      ]
+    }
     </script>
   </head>
   <body>

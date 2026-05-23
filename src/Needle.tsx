@@ -3,39 +3,38 @@ interface NeedleProps {
 }
 
 export function Needle({ cents }: NeedleProps) {
-  // clamp and map cents to angle: -50 → -60deg, 0 → 0, +50 → +60deg
   const clamped = Math.max(-50, Math.min(50, cents));
-  const angle = (clamped / 50) * 60;
+  const angle = (clamped / 50) * 58;
 
   const inTune = Math.abs(cents) < 5;
-  const color = inTune ? '#22c55e' : Math.abs(cents) < 20 ? '#f59e0b' : '#ef4444';
+  const color = inTune ? '#3fb950' : Math.abs(cents) < 20 ? '#d29922' : '#f85149';
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-      {/* Arc gauge */}
-      <svg width="260" height="140" viewBox="0 0 260 140">
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+      <svg width="240" height="128" viewBox="0 0 240 128" aria-hidden="true">
         {/* Background arc */}
         <path
-          d="M 20 130 A 110 110 0 0 1 240 130"
+          d="M 18 118 A 102 102 0 0 1 222 118"
           fill="none"
-          stroke="#334155"
-          strokeWidth="12"
+          stroke="#21293a"
+          strokeWidth="10"
           strokeLinecap="round"
         />
-        {/* Colored zone: in-tune (center) */}
+        {/* Green zone (center ±5¢) */}
         <path
-          d="M 107 35 A 110 110 0 0 1 153 35"
+          d="M 108 26 A 102 102 0 0 1 132 26"
           fill="none"
-          stroke="#22c55e"
-          strokeWidth="12"
+          stroke="#3fb950"
+          strokeWidth="10"
           strokeLinecap="round"
-          opacity="0.3"
+          opacity="0.25"
         />
         {/* Tick marks */}
         {[-50, -25, 0, 25, 50].map((v) => {
-          const a = ((v / 50) * 60 - 90) * (Math.PI / 180);
-          const r1 = 100, r2 = 112;
-          const cx = 130, cy = 130;
+          const a = ((v / 50) * 58 - 90) * (Math.PI / 180);
+          const r1 = 92, r2 = 103;
+          const cx = 120, cy = 118;
+          const isCenter = v === 0;
           return (
             <line
               key={v}
@@ -43,25 +42,59 @@ export function Needle({ cents }: NeedleProps) {
               y1={cy + r1 * Math.sin(a)}
               x2={cx + r2 * Math.cos(a)}
               y2={cy + r2 * Math.sin(a)}
-              stroke={v === 0 ? '#22c55e' : '#64748b'}
-              strokeWidth={v === 0 ? 3 : 1.5}
+              stroke={isCenter ? '#3fb950' : '#30363d'}
+              strokeWidth={isCenter ? 2.5 : 1.5}
+              strokeLinecap="round"
             />
           );
         })}
+        {/* Tick labels */}
+        {[-50, -25, 0, 25, 50].map((v) => {
+          const a = ((v / 50) * 58 - 90) * (Math.PI / 180);
+          const r = 80;
+          const cx = 120, cy = 118;
+          return (
+            <text
+              key={`lbl-${v}`}
+              x={cx + r * Math.cos(a)}
+              y={cy + r * Math.sin(a) + 4}
+              fill={v === 0 ? '#3fb950' : '#484f58'}
+              fontSize="9"
+              textAnchor="middle"
+              fontFamily="JetBrains Mono, monospace"
+            >
+              {v > 0 ? `+${v}` : v}
+            </text>
+          );
+        })}
         {/* Needle */}
-        <g transform={`rotate(${angle}, 130, 130)`}>
-          <line x1="130" y1="130" x2="130" y2="32" stroke={color} strokeWidth="3" strokeLinecap="round" />
-          <circle cx="130" cy="130" r="6" fill={color} />
+        <g transform={`rotate(${angle}, 120, 118)`} style={{ transition: 'transform 0.08s ease-out' }}>
+          <line
+            x1="120" y1="118" x2="120" y2="24"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            opacity="0.9"
+          />
         </g>
-        {/* Labels */}
-        <text x="14" y="140" fill="#64748b" fontSize="11" textAnchor="middle">-50</text>
-        <text x="246" y="140" fill="#64748b" fontSize="11" textAnchor="middle">+50</text>
-        <text x="130" y="140" fill="#64748b" fontSize="11" textAnchor="middle">0</text>
+        {/* Pivot */}
+        <circle cx="120" cy="118" r="4" fill={color} />
+        <circle cx="120" cy="118" r="2" fill="#0d1117" />
       </svg>
 
       {/* Cents readout */}
-      <div style={{ color, fontSize: 14, fontFamily: 'monospace' }}>
-        {cents > 0 ? '+' : ''}{Math.round(cents)} cents
+      <div style={{
+        color,
+        fontSize: '0.72rem',
+        fontFamily: 'JetBrains Mono, monospace',
+        letterSpacing: '0.06em',
+        fontWeight: 600,
+        padding: '2px 10px',
+        background: 'rgba(255,255,255,0.04)',
+        border: '1px solid #30363d',
+        borderRadius: '4px',
+      }}>
+        {cents > 0 ? '+' : ''}{Math.round(cents)} ¢
       </div>
     </div>
   );
