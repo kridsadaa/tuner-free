@@ -1,20 +1,43 @@
-import { useState, useEffect } from 'react';
-import { useMicrophone } from './useMicrophone';
-import { Needle } from './Needle';
-import { Waveform } from './Waveform';
-import { StabilityChart } from './StabilityChart';
-import { INSTRUMENTS, matchString, type Instrument, type Tuning } from './tunings';
-import { playTone, stopTone, startMetronome, stopMetronome } from './audioOutput';
-import './App.css';
+import { useState, useEffect } from "react";
+import { useMicrophone } from "./useMicrophone";
+import { Needle } from "./Needle";
+import { Waveform } from "./Waveform";
+import { StabilityChart } from "./StabilityChart";
+import {
+  INSTRUMENTS,
+  matchString,
+  type Instrument,
+  type Tuning,
+} from "./tunings";
+import {
+  playTone,
+  stopTone,
+  startMetronome,
+  stopMetronome,
+} from "./audioOutput";
+import "./App.css";
 
-type Mode = 'chromatic' | 'instrument';
+type Mode = "chromatic" | "instrument";
 
 export default function App() {
   const [referenceA4, setReferenceA4] = useState(440);
-  const { note, centsHistory, listening, error, volume, analyserNode, start, stop } = useMicrophone(referenceA4);
-  const [mode, setMode] = useState<Mode>('chromatic');
-  const [selectedInstrument, setSelectedInstrument] = useState<Instrument>(INSTRUMENTS[0]);
-  const [selectedTuning, setSelectedTuning] = useState<Tuning>(INSTRUMENTS[0].tunings[0]);
+  const {
+    note,
+    centsHistory,
+    listening,
+    error,
+    volume,
+    analyserNode,
+    start,
+    stop,
+  } = useMicrophone(referenceA4);
+  const [mode, setMode] = useState<Mode>("chromatic");
+  const [selectedInstrument, setSelectedInstrument] = useState<Instrument>(
+    INSTRUMENTS[0],
+  );
+  const [selectedTuning, setSelectedTuning] = useState<Tuning>(
+    INSTRUMENTS[0].tunings[0],
+  );
   const [isStageMode, setIsStageMode] = useState(false);
 
   // Metronome state
@@ -34,7 +57,7 @@ export default function App() {
   const handleInstrumentChange = (inst: Instrument) => {
     setSelectedInstrument(inst);
     setSelectedTuning(inst.tunings[0]);
-    setMode('instrument');
+    setMode("instrument");
   };
 
   const toggleTone = (hz: number) => {
@@ -50,14 +73,20 @@ export default function App() {
 
   // Logic for tuning
   const chromaticInTune = note !== null && Math.abs(note.cents) < 5;
-  const match = note && mode === 'instrument' ? matchString(note.hz, selectedTuning, referenceA4) : null;
+  const match =
+    note && mode === "instrument"
+      ? matchString(note.hz, selectedTuning, referenceA4)
+      : null;
   const instrumentInTune = match !== null && Math.abs(match.cents) < 5;
 
-  const activeCents = mode === 'instrument' ? (match?.cents ?? 0) : (note?.cents ?? 0);
-  const inTune = mode === 'instrument' ? instrumentInTune : chromaticInTune;
+  const activeCents =
+    mode === "instrument" ? (match?.cents ?? 0) : (note?.cents ?? 0);
+  const inTune = mode === "instrument" ? instrumentInTune : chromaticInTune;
 
   return (
-    <div className={`app${isStageMode ? ' stage-mode' : ''}${inTune && note ? ' in-tune-bg' : ''}`}>
+    <div
+      className={`app${isStageMode ? " stage-mode" : ""}${inTune && note ? " in-tune-bg" : ""}`}
+    >
       {!isStageMode && (
         <header>
           <h1>Tuner Free</h1>
@@ -66,8 +95,8 @@ export default function App() {
           <nav className="nav-container" aria-label="Instrument selector">
             <div className="main-modes">
               <button
-                className={`mode-btn${mode === 'chromatic' ? ' active' : ''}`}
-                onClick={() => setMode('chromatic')}
+                className={`mode-btn${mode === "chromatic" ? " active" : ""}`}
+                onClick={() => setMode("chromatic")}
               >
                 Chromatic
               </button>
@@ -76,7 +105,7 @@ export default function App() {
                 {INSTRUMENTS.map((inst) => (
                   <button
                     key={inst.id}
-                    className={`mode-btn${mode === 'instrument' && selectedInstrument.id === inst.id ? ' active' : ''}`}
+                    className={`mode-btn${mode === "instrument" && selectedInstrument.id === inst.id ? " active" : ""}`}
                     onClick={() => handleInstrumentChange(inst)}
                   >
                     {inst.name}
@@ -102,19 +131,21 @@ export default function App() {
       )}
 
       {isStageMode && (
-        <button className="exit-stage-btn" onClick={() => setIsStageMode(false)}>
+        <button
+          className="exit-stage-btn"
+          onClick={() => setIsStageMode(false)}
+        >
           ✕ Exit Stage Mode
         </button>
       )}
 
       <main>
         <section aria-label="Tuning Interface">
-
           {/* ── Display Panel ── */}
           <div className="display-area">
-            {mode === 'chromatic' ? (
+            {mode === "chromatic" ? (
               <div className="note-display-row">
-                <div className={`note-display${inTune ? ' in-tune' : ''}`}>
+                <div className={`note-display${inTune ? " in-tune" : ""}`}>
                   {note ? (
                     <>
                       <span className="note-name">{note.note}</span>
@@ -125,7 +156,7 @@ export default function App() {
                   )}
                 </div>
                 <div className="hz-display">
-                  {note ? `${note.hz.toFixed(2)} Hz` : '— Hz'}
+                  {note ? `${note.hz.toFixed(2)} Hz` : "— Hz"}
                 </div>
               </div>
             ) : (
@@ -135,7 +166,7 @@ export default function App() {
                     {selectedInstrument.tunings.map((t) => (
                       <button
                         key={t.id}
-                        className={`tuning-btn${selectedTuning.id === t.id ? ' active' : ''}`}
+                        className={`tuning-btn${selectedTuning.id === t.id ? " active" : ""}`}
                         onClick={() => setSelectedTuning(t)}
                       >
                         {t.name}
@@ -145,10 +176,12 @@ export default function App() {
                 )}
 
                 <div className="note-display-row">
-                  <h2 className="instrument-title">{selectedInstrument.name}</h2>
+                  <h2 className="instrument-title">
+                    {selectedInstrument.name}
+                  </h2>
                   {!isStageMode && (
                     <div className="hz-display">
-                      {note ? `${note.hz.toFixed(2)} Hz` : '— Hz'}
+                      {note ? `${note.hz.toFixed(2)} Hz` : "— Hz"}
                     </div>
                   )}
                 </div>
@@ -164,20 +197,28 @@ export default function App() {
                     return (
                       <div
                         key={i}
-                        className={`string-card${isActive && note ? ' active' : ''}${cardInTune ? ' in-tune' : ''}${isPlaying ? ' playing' : ''}`}
+                        className={`string-card${isActive && note ? " active" : ""}${cardInTune ? " in-tune" : ""}${isPlaying ? " playing" : ""}`}
                         onClick={() => !isStageMode && toggleTone(s.hz)}
                         role="button"
                         tabIndex={0}
                         aria-label={`String ${s.label} — ${s.note}`}
-                        onKeyDown={(e) => e.key === 'Enter' && !isStageMode && toggleTone(s.hz)}
+                        onKeyDown={(e) =>
+                          e.key === "Enter" && !isStageMode && toggleTone(s.hz)
+                        }
                       >
                         <span className="string-label">{s.label}</span>
                         <span className="string-note">{s.note}</span>
-                        {!isStageMode && <span className="string-hz">{targetHz.toFixed(1)} Hz</span>}
+                        {!isStageMode && (
+                          <span className="string-hz">
+                            {targetHz.toFixed(1)} Hz
+                          </span>
+                        )}
                         <span className="string-cents">
                           {isActive && note
-                            ? `${cents! > 0 ? '+' : ''}${Math.round(cents!)} ¢`
-                            : isPlaying ? '♪' : '—'}
+                            ? `${cents! > 0 ? "+" : ""}${Math.round(cents!)} ¢`
+                            : isPlaying
+                              ? "♪"
+                              : "—"}
                         </span>
                       </div>
                     );
@@ -191,7 +232,10 @@ export default function App() {
               <Needle cents={activeCents} />
             </div>
 
-            <div className={`badge${inTune && note ? ' visible' : ''}`} role="status">
+            <div
+              className={`badge${inTune && note ? " visible" : ""}`}
+              role="status"
+            >
               IN TUNE ✓
             </div>
 
@@ -200,23 +244,33 @@ export default function App() {
             )}
 
             {!isStageMode && (
-              <div className="visualizer-area" style={{ padding: '0 16px 16px' }}>
+              <div
+                className="visualizer-area"
+                style={{ padding: "0 16px 16px" }}
+              >
                 <Waveform analyser={analyserNode} />
                 <div className="vol-bar-wrap" aria-label="Volume Level">
-                  <div className="vol-bar" style={{ width: `${Math.min(100, volume * 300)}%` }} />
+                  <div
+                    className="vol-bar"
+                    style={{ width: `${Math.min(100, volume * 300)}%` }}
+                  />
                 </div>
               </div>
             )}
           </div>
 
-          {error && <p className="error" role="alert">{error}</p>}
+          {error && (
+            <p className="error" role="alert">
+              {error}
+            </p>
+          )}
 
           <div className="controls">
             <button
-              className={`btn ${listening ? 'btn-stop' : 'btn-start'}`}
+              className={`btn ${listening ? "btn-stop" : "btn-start"}`}
               onClick={listening ? stop : start}
             >
-              {listening ? 'Stop Tuner' : 'Start Tuner'}
+              {listening ? "Stop Tuner" : "Start Tuner"}
             </button>
             {!listening && !isStageMode && (
               <p className="hint">Allow microphone access when prompted</p>
@@ -225,7 +279,10 @@ export default function App() {
         </section>
 
         {!isStageMode && (
-          <button className="stage-toggle-btn" onClick={() => setIsStageMode(true)}>
+          <button
+            className="stage-toggle-btn"
+            onClick={() => setIsStageMode(true)}
+          >
             Stage Mode
           </button>
         )}
@@ -236,15 +293,26 @@ export default function App() {
             <div className="metronome-header">
               <h3>Metronome</h3>
               <button
-                className={`btn-metro ${metronomeOn ? 'active' : ''}`}
+                className={`btn-metro ${metronomeOn ? "active" : ""}`}
                 onClick={() => setMetronomeOn(!metronomeOn)}
                 aria-pressed={metronomeOn}
               >
-                {metronomeOn ? 'Stop' : 'Start'}
+                {metronomeOn ? "Stop" : "Start"}
               </button>
             </div>
             <div className="metronome-controls">
-              <div className="bpm-display" aria-live="polite">{bpm} <span style={{ fontSize: '0.6em', color: 'var(--text-3)', fontWeight: 500 }}>BPM</span></div>
+              <div className="bpm-display" aria-live="polite">
+                {bpm}{" "}
+                <span
+                  style={{
+                    fontSize: "0.6em",
+                    color: "var(--text-3)",
+                    fontWeight: 500,
+                  }}
+                >
+                  BPM
+                </span>
+              </div>
               <input
                 type="range"
                 min="40"
@@ -262,15 +330,28 @@ export default function App() {
             <article>
               <h2>Free Online Instrument Tuner</h2>
               <p>
-                Tune your Guitar, Violin, Bass, Ukulele, Cello, and traditional Thai instruments
-                directly in your browser — no app download needed. Tuner Free uses high-precision
-                pitch detection to help you achieve perfect intonation in real time.
+                Tune your Guitar, Violin, Bass, Ukulele, Cello, and traditional
+                Thai instruments directly in your browser — no app download
+                needed. Tuner Free uses high-precision pitch detection to help
+                you achieve perfect intonation in real time.
               </p>
               <ul className="feature-list">
-                <li><strong>Accurate:</strong> Precision within 1 cent using the Pitchy algorithm.</li>
-                <li><strong>Fast:</strong> Real-time response with visual waveform and stability chart.</li>
-                <li><strong>Private:</strong> All audio stays on your device. Nothing is sent to any server.</li>
-                <li><strong>Free:</strong> No ads, no subscriptions, no sign-up required.</li>
+                <li>
+                  <strong>Accurate:</strong> Precision within 1 cent using the
+                  Pitchy algorithm.
+                </li>
+                <li>
+                  <strong>Fast:</strong> Real-time response with visual waveform
+                  and stability chart.
+                </li>
+                <li>
+                  <strong>Private:</strong> All audio stays on your device.
+                  Nothing is sent to any server.
+                </li>
+                <li>
+                  <strong>Free:</strong> No ads, no subscriptions, no sign-up
+                  required.
+                </li>
               </ul>
             </article>
 
@@ -280,33 +361,37 @@ export default function App() {
               <section className="instrument-desc">
                 <h3>Guitar Tuner</h3>
                 <p>
-                  Tune your acoustic or electric guitar in Standard (E A D G B e) or Drop D tuning.
-                  Each string card lights up when your pitch is close, turning green when you're in tune.
+                  Tune your acoustic or electric guitar in Standard (E A D G B
+                  e) or Drop D tuning. Each string card lights up when your
+                  pitch is close, turning green when you're in tune.
                 </p>
               </section>
 
               <section className="instrument-desc">
                 <h3>Violin Tuner</h3>
                 <p>
-                  Tune your violin in Standard tuning (G D A E). The real-time needle and stability
-                  chart help you find and hold each pitch accurately.
+                  Tune your violin in Standard tuning (G D A E). The real-time
+                  needle and stability chart help you find and hold each pitch
+                  accurately.
                 </p>
               </section>
 
               <section className="instrument-desc">
                 <h3>Bass Tuner</h3>
                 <p>
-                  Tune your bass guitar in Standard tuning (E A D G). The low-frequency pitch
-                  detection is optimized to handle bass strings accurately.
+                  Tune your bass guitar in Standard tuning (E A D G). The
+                  low-frequency pitch detection is optimized to handle bass
+                  strings accurately.
                 </p>
               </section>
 
               <section className="instrument-desc">
                 <h3>Thai Instrument Tuner (ซออู้, ซอด้วง, ซอสามสาย)</h3>
                 <p>
-                  Tuner Free is one of the few online tuners with dedicated support for Thai classical
-                  instruments. Tune ซออู้ (Sao U) in four tunings — ทางเพียงออ, ทางกลาง, ทางนอก,
-                  and ทางใน — as well as ซอด้วง (Sao Duang) and ซอสามสาย (Sao Sam Sai).
+                  Tuner Free is one of the few online tuners with dedicated
+                  support for Thai classical instruments. Tune ซออู้ (Sao U) in
+                  four tunings — ทางเพียงออ, ทางกลาง, ทางนอก, and ทางใน — as
+                  well as ซอด้วง (Sao Duang) and ซอสามสาย (Sao Sam Sai).
                 </p>
               </section>
             </article>
@@ -317,40 +402,44 @@ export default function App() {
               <details className="faq-item">
                 <summary>Is Tuner Free really free to use?</summary>
                 <p>
-                  Yes, completely free. No ads, no subscriptions, no sign-up required.
-                  Just open the website and start tuning.
+                  Yes, completely free. No ads, no subscriptions, no sign-up
+                  required. Just open the website and start tuning.
                 </p>
               </details>
 
               <details className="faq-item">
                 <summary>Does Tuner Free work on mobile?</summary>
                 <p>
-                  Yes. It works on all modern browsers including mobile browsers on iOS and Android.
-                  Just allow microphone access when prompted.
+                  Yes. It works on all modern browsers including mobile browsers
+                  on iOS and Android. Just allow microphone access when
+                  prompted.
                 </p>
               </details>
 
               <details className="faq-item">
                 <summary>Does my audio get sent to a server?</summary>
                 <p>
-                  No. All audio processing happens entirely on your device using the Web Audio API.
-                  Your microphone audio is never uploaded anywhere, ensuring complete privacy.
+                  No. All audio processing happens entirely on your device using
+                  the Web Audio API. Your microphone audio is never uploaded
+                  anywhere, ensuring complete privacy.
                 </p>
               </details>
 
               <details className="faq-item">
                 <summary>Can I tune Thai instruments with Tuner Free?</summary>
                 <p>
-                  Yes! Tuner Free has dedicated modes for ซออู้, ซอด้วง, and ซอสามสาย — with
-                  multiple tunings for ซออู้ including ทางเพียงออ, ทางกลาง, ทางนอก, and ทางใน.
+                  Yes! Tuner Free has dedicated modes for ซออู้, ซอด้วง, and
+                  ซอสามสาย — with multiple tunings for ซออู้ including
+                  ทางเพียงออ, ทางกลาง, ทางนอก, and ทางใน.
                 </p>
               </details>
 
               <details className="faq-item">
                 <summary>How accurate is the tuner?</summary>
                 <p>
-                  Tuner Free uses the Pitchy pitch detection algorithm with accuracy within 1 cent.
-                  The stability chart lets you see how steady your pitch is over time.
+                  Tuner Free uses the Pitchy pitch detection algorithm with
+                  accuracy within 1 cent. The stability chart lets you see how
+                  steady your pitch is over time.
                 </p>
               </details>
             </article>
@@ -359,7 +448,10 @@ export default function App() {
       </main>
 
       <footer>
-        <p>&copy; {new Date().getFullYear()} Tuner Free · Chromatic Tuner for All Instruments</p>
+        <p>
+          &copy; {new Date().getFullYear()} Tuner Free · Chromatic Tuner for All
+          Instruments
+        </p>
       </footer>
     </div>
   );
