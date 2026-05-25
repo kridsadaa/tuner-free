@@ -31,7 +31,7 @@ export function ChangelogModal({ isOpen, onClose }: ChangelogModalProps) {
             <li><strong>Feature:</strong> Upgraded Pitch History Graph to canvas-based rich visualization.</li>
             <li><strong>Feature:</strong> Added Reference Tone (Tuning Fork) generator.</li>
             <li><strong>Feature:</strong> Added new Thai and International instruments to the database.</li>
-            <li><strong>PWA:</strong> Added offline support and install prompt.</li>
+            <li><strong>PWA:</strong> Added offline support, install prompt, and fixed mobile responsive layout.</li>
           </ul>
         </div>
       </div>
