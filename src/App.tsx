@@ -60,6 +60,16 @@ export default function App() {
   const [metronomeOn, setMetronomeOn] = useState(false);
   const [playingToneHz, setPlayingToneHz] = useState<number | null>(null);
 
+  // Reference tone quick-access notes (chromatic mode)
+  const REF_NOTES = [
+    { label: 'A4', hz: 440.00 },
+    { label: 'E4', hz: 329.63 },
+    { label: 'B3', hz: 246.94 },
+    { label: 'G3', hz: 196.00 },
+    { label: 'D3', hz: 146.83 },
+    { label: 'A3', hz: 220.00 },
+  ] as const;
+
   useEffect(() => {
     if (metronomeOn) {
       startMetronome(bpm);
@@ -437,6 +447,52 @@ export default function App() {
               <p className="hint">Allow microphone access when prompted</p>
             )}
           </div>
+
+          {/* ── Reference Tone Panel ── */}
+          {!isStageMode && (
+            <section className="ref-tone-panel" aria-label="Reference Tone">
+              <div className="ref-tone-header">
+                <span className="ref-tone-title">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" style={{ opacity: 0.7, flexShrink: 0 }}>
+                    <path d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+                  </svg>
+                  Reference Tone
+                </span>
+                <span className="ref-tone-a4-badge">A4 = {referenceA4} Hz</span>
+              </div>
+
+              {mode === "chromatic" ? (
+                <div className="ref-tone-grid">
+                  {REF_NOTES.map(({ label, hz }) => {
+                    const targetHz = hz * (referenceA4 / 440);
+                    const isPlaying = playingToneHz === targetHz;
+                    return (
+                      <button
+                        key={label}
+                        id={`ref-tone-${label.replace('#', 's')}`}
+                        className={`ref-tone-btn${isPlaying ? ' playing' : ''}`}
+                        onClick={() => toggleTone(hz)}
+                        aria-pressed={isPlaying}
+                        aria-label={`Play reference tone ${label} at ${targetHz.toFixed(1)} Hz`}
+                      >
+                        <span className="ref-tone-note">{label}</span>
+                        <span className="ref-tone-hz">{targetHz.toFixed(1)}</span>
+                        {isPlaying && (
+                          <span className="ref-tone-wave" aria-hidden="true">
+                            <span /><span /><span />
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="ref-tone-hint">
+                  Tap any string card above to hear the reference pitch
+                </p>
+              )}
+            </section>
+          )}
         </section>
 
         {!isStageMode && (
