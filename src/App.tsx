@@ -33,12 +33,24 @@ export default function App() {
     start,
     stop,
   } = useMicrophone(referenceA4);
-  const [mode, setMode] = useState<Mode>("chromatic");
+  const getInitialState = () => {
+    const path = window.location.pathname.replace(/^\/|\/$/g, "");
+    if (path) {
+      const inst = INSTRUMENTS.find((i) => i.id === path);
+      if (inst) {
+        return { mode: "instrument" as Mode, inst };
+      }
+    }
+    return { mode: "chromatic" as Mode, inst: INSTRUMENTS[0] };
+  };
+
+  const initialState = getInitialState();
+  const [mode, setMode] = useState<Mode>(initialState.mode);
   const [selectedInstrument, setSelectedInstrument] = useState<Instrument>(
-    INSTRUMENTS[0],
+    initialState.inst,
   );
   const [selectedTuning, setSelectedTuning] = useState<Tuning>(
-    INSTRUMENTS[0].tunings[0],
+    initialState.inst.tunings[0],
   );
   const [isStageMode, setIsStageMode] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -50,6 +62,45 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // ── Routing & SEO ───────────────────────────────────────────────────────
+  useEffect(() => {
+    const titleEl = document.querySelector("title");
+    const metaDesc = document.querySelector('meta[name="description"]');
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+
+    let newUrl = "/";
+    let newTitle = "Tuner Free — Free Online Chromatic Tuner";
+    let newDesc = "High-precision chromatic tuner for Guitar, Violin, Bass, Ukulele, Cello, and Thai instruments. Free, no ads, works in any browser.";
+
+    if (mode === "instrument") {
+      newUrl = `/${selectedInstrument.id}`;
+      newTitle = `${selectedInstrument.name} Tuner — Free Online Tuner`;
+      newDesc = `Free online tuner for ${selectedInstrument.name}. Tune your instrument accurately with real-time pitch detection. No app download needed.`;
+    }
+
+    if (window.location.pathname !== newUrl) {
+      window.history.pushState(null, "", newUrl);
+    }
+
+    if (titleEl) titleEl.textContent = newTitle;
+    if (metaDesc) metaDesc.setAttribute("content", newDesc);
+    if (ogTitle) ogTitle.setAttribute("content", newTitle);
+    if (ogUrl) ogUrl.setAttribute("content", `https://tuner-free.vercel.app${newUrl}`);
+  }, [mode, selectedInstrument]);
+
+  // Handle browser back/forward
+  useEffect(() => {
+    const handlePopState = () => {
+      const state = getInitialState();
+      setMode(state.mode);
+      setSelectedInstrument(state.inst);
+      setSelectedTuning(state.inst.tunings[0]);
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
   // ── PWA install flow ────────────────────────────────────────────────────
