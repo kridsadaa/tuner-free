@@ -353,6 +353,25 @@ export default function App() {
                   />
                 </div>
               </div>
+
+              {/* Version Info */}
+              <div className="drawer-section drawer-section--version" style={{ borderTop: '1px solid var(--border)', marginTop: '4px', paddingTop: '12px', paddingBottom: '16px', display: 'flex', justifyContent: 'center' }}>
+                <button 
+                  className="drawer-version-btn" 
+                  onClick={() => setIsChangelogOpen(true)}
+                  aria-label="View changelog"
+                  style={{
+                    background: 'none', border: 'none', color: 'var(--text-3)', fontSize: '0.75rem', 
+                    fontFamily: 'var(--font-mono)', padding: '6px 12px', cursor: 'pointer',
+                    borderRadius: 'var(--radius-sm)', transition: 'background 0.2s, color 0.2s'
+                  }}
+                  onMouseOver={(e) => { e.currentTarget.style.background = 'var(--surface-2)'; e.currentTarget.style.color = 'var(--text-2)'; }}
+                  onMouseOut={(e) => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'var(--text-3)'; }}
+                >
+                  v{import.meta.env.APP_VERSION || "1.0.0"} 
+                  <span style={{ opacity: 0.7 }}> ({import.meta.env.APP_BUILD_TIME || "Latest"})</span>
+                </button>
+              </div>
             </div>
           </nav>
         </>
@@ -754,14 +773,6 @@ export default function App() {
             {" "}GitHub
           </a>
         </p>
-        <button 
-          className="footer-version-btn" 
-          onClick={() => setIsChangelogOpen(true)}
-          aria-label="View changelog"
-        >
-          v{import.meta.env.APP_VERSION || "1.0.0"} 
-          <span className="footer-timestamp">({import.meta.env.APP_BUILD_TIME || "Latest"})</span>
-        </button>
       </footer>
     </div>
 
