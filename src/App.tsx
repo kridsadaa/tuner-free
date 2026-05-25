@@ -208,10 +208,43 @@ export default function App() {
                 </button>
               </div>
 
-              {/* Instruments */}
+              {/* Thai Instruments */}
               <div className="drawer-section">
-                <p className="drawer-section-label">Instruments</p>
-                {INSTRUMENTS.map((inst) => (
+                <p className="drawer-section-label">
+                  <span className="drawer-section-icon">🎵</span> เครื่องดนตรีไทย
+                </p>
+                {INSTRUMENTS.filter((i) => i.category === "thai").map((inst) => (
+                  <button
+                    key={inst.id}
+                    className={`drawer-item${
+                      mode === "instrument" && selectedInstrument.id === inst.id
+                        ? " active"
+                        : ""
+                    }`}
+                    onClick={() => handleInstrumentChange(inst)}
+                    id={`drawer-inst-${inst.id}`}
+                  >
+                    <span className="drawer-item-name">{inst.name}</span>
+                    <span className="drawer-item-desc">
+                      {inst.tunings.length > 1
+                        ? `${inst.tunings.length} ทาง`
+                        : inst.tunings[0].strings.length + " สาย"}
+                    </span>
+                    {mode === "instrument" && selectedInstrument.id === inst.id && (
+                      <svg className="drawer-check" width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                        <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" />
+                      </svg>
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              {/* International Instruments */}
+              <div className="drawer-section drawer-section--intl">
+                <p className="drawer-section-label">
+                  <span className="drawer-section-icon">🎸</span> International
+                </p>
+                {INSTRUMENTS.filter((i) => i.category === "international").map((inst) => (
                   <button
                     key={inst.id}
                     className={`drawer-item${

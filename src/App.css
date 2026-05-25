@@ -1190,6 +1190,22 @@ footer {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   padding: 4px 16px 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.drawer-section-icon {
+  font-size: 0.75rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Divider before International section */
+.drawer-section--intl {
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+  padding-top: 4px;
 }
 
 /* Item row */
