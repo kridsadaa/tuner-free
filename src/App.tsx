@@ -336,6 +336,10 @@ export default function App() {
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Fixed Drawer Footer */}
+            <div className="drawer-footer">
               {/* Calibration */}
               <div className="drawer-section drawer-section--calibration">
                 <p className="drawer-section-label">Reference Pitch</p>
@@ -355,7 +359,7 @@ export default function App() {
               </div>
 
               {/* Version Info */}
-              <div className="drawer-section drawer-section--version" style={{ borderTop: '1px solid var(--border)', marginTop: '4px', paddingTop: '12px', paddingBottom: '16px', display: 'flex', justifyContent: 'center' }}>
+              <div className="drawer-section drawer-section--version" style={{ display: 'flex', justifyContent: 'center' }}>
                 <button 
                   className="drawer-version-btn" 
                   onClick={() => setIsChangelogOpen(true)}
@@ -368,7 +372,7 @@ export default function App() {
                   onMouseOver={(e) => { e.currentTarget.style.background = 'var(--surface-2)'; e.currentTarget.style.color = 'var(--text-2)'; }}
                   onMouseOut={(e) => { e.currentTarget.style.background = 'none'; e.currentTarget.style.color = 'var(--text-3)'; }}
                 >
-                  v{import.meta.env.APP_VERSION || "1.0.0"} 
+                  v{import.meta.env.APP_VERSION || "1.0.1"} 
                   <span style={{ opacity: 0.7 }}> ({import.meta.env.APP_BUILD_TIME || "Latest"})</span>
                 </button>
               </div>

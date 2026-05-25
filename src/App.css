@@ -1490,4 +1490,33 @@ footer {
   accent-color: var(--accent);
 }
 
+/* Drawer Footer (fixed at the bottom) */
+.drawer-footer {
+  flex-shrink: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.drawer-footer .drawer-section {
+  padding: 0;
+}
+
+.drawer-footer .drawer-section--calibration {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.drawer-footer .drawer-section--version {
+  border-top: none !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 4px !important;
+}
+
+
 
