@@ -44,10 +44,43 @@ for (const inst of instruments) {
     .replace(/<meta property="og:description" content="[^"]*"/, `<meta property="og:description" content="${desc}"`)
     .replace(/<meta property="og:url" content="[^"]*"/, `<meta property="og:url" content="https://tuner-free.vercel.app/${inst.id}"`)
     .replace(/<meta name="twitter:title" content="[^"]*"/, `<meta name="twitter:title" content="${title}"`)
-    .replace(/<meta name="twitter:description" content="[^"]*"/, `<meta name="twitter:description" content="${desc}"`);
+    .replace(/<meta name="twitter:description" content="[^"]*"/, `<meta name="twitter:description" content="${desc}"`)
+    .replace(/<link rel="canonical" href="[^"]*"/, `<link rel="canonical" href="https://tuner-free.vercel.app/${inst.id}"`);
 
   fs.writeFileSync(path.join(dir, 'index.html'), newHtml);
   console.log(`Generated dist/${inst.id}/index.html`);
 }
+
+// ── Generate Sitemap ──────────────────────────────────────────────────────────
+const baseUrl = "https://tuner-free.vercel.app";
+let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${baseUrl}/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>`;
+
+for (const inst of instruments) {
+  sitemap += `
+  <url>
+    <loc>${baseUrl}/${inst.id}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+}
+sitemap += `\n</urlset>`;
+
+fs.writeFileSync(path.join(distPath, 'sitemap.xml'), sitemap);
+console.log('Generated dist/sitemap.xml');
+
+// ── Generate robots.txt ───────────────────────────────────────────────────────
+const robotsTxt = `User-agent: *
+Allow: /
+
+Sitemap: ${baseUrl}/sitemap.xml`;
+
+fs.writeFileSync(path.join(distPath, 'robots.txt'), robotsTxt);
+console.log('Generated dist/robots.txt');
 
 console.log("Prerendering complete.");
