@@ -13,7 +13,7 @@ function median(arr: number[]): number {
 
 export function useMicrophone(referenceA4: number = 440) {
   const [note, setNote] = useState<NoteInfo | null>(null);
-  const [centsHistory, setCentsHistory] = useState<number[]>([]);
+  const [centsHistory, setCentsHistory] = useState<(number | null)[]>([]);
   const [listening, setListening] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [volume, setVolume] = useState(0);
@@ -117,21 +117,24 @@ export function useMicrophone(referenceA4: number = 440) {
               }
             }
 
-            // Update history
-            const cHist = centsHistoryArrRef.current;
+            // Update history (keep up to 300 values ≈ 10s)
+            const cHist = centsHistoryArrRef.current as (number | null)[];
             cHist.push(finalCents);
-            if (cHist.length > 100) cHist.shift();
+            if (cHist.length > 300) cHist.shift();
             setCentsHistory([...cHist]);
           }
         } else {
-          // silence — reset
+          // Silence — push null gap instead of clearing so the graph retains history
           pitchHistoryRef.current = [];
           pendingRef.current = null;
           currentNoteKeyRef.current = '';
-          
-          if (centsHistoryArrRef.current.length > 0) {
-            centsHistoryArrRef.current = [];
-            setCentsHistory([]);
+
+          const cHist = centsHistoryArrRef.current as (number | null)[];
+          // Only push null if the last value wasn't already null
+          if (cHist.length > 0 && cHist[cHist.length - 1] !== null) {
+            cHist.push(null);
+            if (cHist.length > 300) cHist.shift();
+            setCentsHistory([...cHist]);
           }
         }
 

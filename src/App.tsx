@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useMicrophone } from "./useMicrophone";
 import { Needle } from "./Needle";
 import { Waveform } from "./Waveform";
-import { StabilityChart } from "./StabilityChart";
+import { PitchHistoryGraph } from "./PitchHistoryGraph";
 import {
   INSTRUMENTS,
   matchString,
@@ -410,8 +410,8 @@ export default function App() {
               IN TUNE ✓
             </div>
 
-            {!isStageMode && centsHistory.length > 0 && (
-              <StabilityChart history={centsHistory} />
+            {!isStageMode && centsHistory.length > 1 && (
+              <PitchHistoryGraph history={centsHistory} />
             )}
 
             {!isStageMode && (

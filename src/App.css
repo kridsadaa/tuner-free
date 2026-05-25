@@ -713,6 +713,7 @@ main {
 }
 
 /* ─── Stability chart ───────────────────────────────────────── */
+/* ─── Pitch History Graph ───────────────────────────────────── */
 .stability-chart-wrap {
   width: 100%;
   display: flex;
@@ -728,6 +729,54 @@ main {
   letter-spacing: 0.08em;
   font-weight: 600;
 }
+
+.pitch-history-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0 10px;
+}
+
+.pitch-history-canvas {
+  width: 100%;
+  height: 80px;
+  display: block;
+}
+
+.pitch-history-legend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px;
+}
+
+.phl {
+  font-size: 0.62rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.phl::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.phl--green { color: #3fb950; }
+.phl--green::before { background: #3fb950; }
+.phl--amber { color: #d29922; }
+.phl--amber::before { background: #d29922; }
+.phl--red   { color: #f85149; }
+.phl--red::before { background: #f85149; }
+.phl--time  { color: var(--text-3); margin-left: auto; }
+.phl--time::before { display: none; }
 
 /* ─── Metronome ─────────────────────────────────────────────── */
 .metronome-section {
