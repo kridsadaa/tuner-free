@@ -8,18 +8,18 @@
 
 ## Features
 
-- 🎸 **Guitar** — Standard (E A D G B e) and Drop D tuning
-- 🎻 **Violin** — Standard (G D A E) tuning
-- 🎸 **Bass** — Standard (E A D G) tuning
-- 🎵 **Ukulele** — Standard High-G tuning
-- 🎻 **Cello** — Standard (C G D A) tuning
-- 🇹🇭 **Thai instruments** — ซออู้ (4 tunings), ซอด้วง, ซอสามสาย
+- 🎸 **Guitar** — Standard (E A D G B e), Drop D, and 7-String (Standard / Drop A) tunings
+- 🎻 **Orchestral Strings** — Violin, Viola, Cello, Bass, and Double Bass (Standard / 5-string)
+- 🇹🇭 **Thai instruments** — ซออู้ (4 tunings), ซอด้วง, ซอสามสาย, จะเข้ (3 tunings), พิณ (อีสาน/ซึง), กระจับปี่
+- 🎵 **Other Instruments** — Ukulele, Mandolin, Banjo (Open G / Double C)
 - 🎵 **Chromatic mode** — works for any instrument
 - 🎛️ **Metronome** — 40–208 BPM
-- 📊 **Stability chart** — track your intonation over time
+- 📊 **Pitch History Graph** — Rich canvas-based real-time tracking of note stability and frequency deviation
 - 🖥️ **Stage Mode** — large display for live performance
 - 🔒 **Privacy first** — all audio processed locally, nothing sent to any server
-- ⚡ **Reference pitch calibration** — A4 from 410–450 Hz
+- ⚡ **Reference pitch calibration** & **Tuning Fork** generator — A4 from 410–450 Hz
+- 📱 **PWA & Offline Ready** — Installable to desktop or mobile home screens, works offline
+- 🚀 **SEO Prerendered** — Statically compiled dynamic instrument pages with custom titles and canonical tags for search crawlers
 
 ---
 
@@ -71,14 +71,17 @@ npm run build
 
 ```
 src/
-├── App.tsx           # Main app component
-├── App.css           # Global styles
-├── useMicrophone.ts  # Microphone & pitch detection hook
-├── tunings.ts        # Instrument tuning definitions
-├── audioOutput.ts    # Tone & metronome audio output
-├── Needle.tsx        # SVG tuner needle component
-├── Waveform.tsx      # Real-time waveform visualizer
-└── StabilityChart.tsx # Cents stability over time chart
+├── App.tsx               # Main app component
+├── App.css               # Global styles
+├── useMicrophone.ts      # Microphone & pitch detection hook
+├── tunings.ts            # Instrument tuning definitions
+├── audioOutput.ts        # Tone & metronome audio output
+├── Needle.tsx            # SVG tuner needle component
+├── Waveform.tsx          # Real-time waveform visualizer
+├── PitchHistoryGraph.tsx # Canvas-based pitch frequency and stability graph
+├── PWAInstallBanner.tsx  # PWA app install prompt component
+├── usePWAInstaller.ts    # PWA installer trigger hook
+└── ChangelogModal.tsx    # App version changelog dialog modal
 ```
 
 ---
@@ -98,3 +101,4 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 ## License
 
 [MIT](LICENSE)
+
