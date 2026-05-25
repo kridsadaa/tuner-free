@@ -1079,18 +1079,18 @@ footer {
 @keyframes pwa-slide-up {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateX(-50%) translateY(24px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
   }
 }
 
 .pwa-banner,
 .pwa-ios-hint {
   position: fixed;
-  bottom: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
   width: calc(100% - 32px);
@@ -1227,33 +1227,43 @@ footer {
 /* Dismiss button */
 .pwa-banner-dismiss {
   position: absolute;
-  top: 8px;
+  top: 10px;
   right: 10px;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.05);
   border: none;
-  color: var(--text-3);
-  font-size: 0.75rem;
-  line-height: 1;
+  color: var(--text-2);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
-  padding: 4px 6px;
-  border-radius: var(--radius-sm);
+  border-radius: 50%;
   transition: color 0.15s, background 0.15s;
   font-family: inherit;
 }
 
 .pwa-banner-dismiss:hover {
   color: var(--text-1);
-  background: var(--surface-2);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* Slightly more compact on very narrow screens */
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   .pwa-banner,
   .pwa-ios-hint {
     flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 24px 16px 16px 16px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    width: calc(100% - 24px);
+  }
+
+  .pwa-banner-body {
     align-items: flex-start;
-    gap: 10px;
-    padding-top: 20px;
+    padding-right: 24px;
   }
 
   .pwa-banner-cta {
