@@ -179,7 +179,7 @@ export default function App() {
       {isReadyToInstall && !isStandalone && !isStageMode && (
         <PWAInstallBanner onInstall={triggerInstall} />
       )}
-      {!isStandalone && !isStageMode && <IOSInstallHint />}
+      {!isReadyToInstall && !isStandalone && !isStageMode && <IOSInstallHint />}
 
       {!isStageMode && (
         <header>
