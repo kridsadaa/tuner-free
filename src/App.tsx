@@ -15,6 +15,8 @@ import {
   startMetronome,
   stopMetronome,
 } from "./audioOutput";
+import { usePWAInstaller } from "./usePWAInstaller";
+import { PWAInstallBanner, IOSInstallHint } from "./PWAInstallBanner";
 import "./App.css";
 
 type Mode = "chromatic" | "instrument";
@@ -39,6 +41,19 @@ export default function App() {
     INSTRUMENTS[0].tunings[0],
   );
   const [isStageMode, setIsStageMode] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  // Close drawer on Escape key
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsDrawerOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // ── PWA install flow ────────────────────────────────────────────────────
+  const { isReadyToInstall, isStandalone, triggerInstall } = usePWAInstaller();
 
   // Metronome state
   const [bpm, setBpm] = useState(120);
@@ -58,6 +73,12 @@ export default function App() {
     setSelectedInstrument(inst);
     setSelectedTuning(inst.tunings[0]);
     setMode("instrument");
+    setIsDrawerOpen(false);
+  };
+
+  const handleChromaticSelect = () => {
+    setMode("chromatic");
+    setIsDrawerOpen(false);
   };
 
   const toggleTone = (hz: number) => {
@@ -87,47 +108,154 @@ export default function App() {
     <div
       className={`app${isStageMode ? " stage-mode" : ""}${inTune && note ? " in-tune-bg" : ""}`}
     >
+      {/* ── PWA Install Portal ── */}
+      {isReadyToInstall && !isStandalone && !isStageMode && (
+        <PWAInstallBanner onInstall={triggerInstall} />
+      )}
+      {!isStandalone && !isStageMode && <IOSInstallHint />}
+
       {!isStageMode && (
         <header>
           <h1>Tuner Free</h1>
           <p className="subtitle">Online Instrument Tuner</p>
 
-          <nav className="nav-container" aria-label="Instrument selector">
-            <div className="main-modes">
-              <button
-                className={`mode-btn${mode === "chromatic" ? " active" : ""}`}
-                onClick={() => setMode("chromatic")}
+          {/* ── Compact mode bar with drawer toggle ── */}
+          <div className="mode-bar">
+            {/* Current selection chip */}
+            <div className="mode-chip" aria-live="polite">
+              <span className="mode-chip-dot" aria-hidden="true" />
+              <span>
+                {mode === "chromatic"
+                  ? "Chromatic"
+                  : selectedInstrument.name}
+              </span>
+              {mode === "instrument" && selectedInstrument.tunings.length > 1 && (
+                <span className="mode-chip-tuning">
+                  &nbsp;· {selectedTuning.name}
+                </span>
+              )}
+            </div>
+
+            {/* Toggle button */}
+            <button
+              className={`drawer-toggle${isDrawerOpen ? " open" : ""}`}
+              onClick={() => setIsDrawerOpen((v) => !v)}
+              aria-expanded={isDrawerOpen}
+              aria-controls="instrument-drawer"
+              aria-label="Select instrument"
+              id="drawer-toggle-btn"
+            >
+              <span className="drawer-toggle-label">Select</span>
+              <svg
+                className="drawer-toggle-icon"
+                width="14"
+                height="14"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                aria-hidden="true"
               >
-                Chromatic
+                <path d="M2 4h12v1.5H2V4Zm2 3h8v1.5H4V7Zm2 3h4v1.5H6V10Z" />
+              </svg>
+            </button>
+          </div>
+        </header>
+      )}
+
+      {/* ── Slide Drawer ── */}
+      {!isStageMode && (
+        <>
+          {/* Backdrop */}
+          <div
+            className={`drawer-backdrop${isDrawerOpen ? " visible" : ""}`}
+            onClick={() => setIsDrawerOpen(false)}
+            aria-hidden="true"
+          />
+
+          {/* Panel */}
+          <nav
+            id="instrument-drawer"
+            className={`instrument-drawer${isDrawerOpen ? " open" : ""}`}
+            aria-label="Instrument selector"
+          >
+            <div className="drawer-header">
+              <span className="drawer-title">Select Mode</span>
+              <button
+                className="drawer-close"
+                onClick={() => setIsDrawerOpen(false)}
+                aria-label="Close instrument selector"
+                id="drawer-close-btn"
+              >
+                ✕
               </button>
-              <span className="nav-divider" aria-hidden="true"></span>
-              <div className="instrument-list">
+            </div>
+
+            <div className="drawer-body">
+              {/* Chromatic */}
+              <div className="drawer-section">
+                <p className="drawer-section-label">Chromatic</p>
+                <button
+                  className={`drawer-item${mode === "chromatic" ? " active" : ""}`}
+                  onClick={handleChromaticSelect}
+                  id="drawer-chromatic-btn"
+                >
+                  <span className="drawer-item-name">Chromatic</span>
+                  <span className="drawer-item-desc">All 12 notes</span>
+                  {mode === "chromatic" && (
+                    <svg className="drawer-check" width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                      <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+
+              {/* Instruments */}
+              <div className="drawer-section">
+                <p className="drawer-section-label">Instruments</p>
                 {INSTRUMENTS.map((inst) => (
                   <button
                     key={inst.id}
-                    className={`mode-btn${mode === "instrument" && selectedInstrument.id === inst.id ? " active" : ""}`}
+                    className={`drawer-item${
+                      mode === "instrument" && selectedInstrument.id === inst.id
+                        ? " active"
+                        : ""
+                    }`}
                     onClick={() => handleInstrumentChange(inst)}
+                    id={`drawer-inst-${inst.id}`}
                   >
-                    {inst.name}
+                    <span className="drawer-item-name">{inst.name}</span>
+                    <span className="drawer-item-desc">
+                      {inst.tunings.length > 1
+                        ? `${inst.tunings.length} tunings`
+                        : inst.tunings[0].strings.length + " strings"}
+                    </span>
+                    {mode === "instrument" && selectedInstrument.id === inst.id && (
+                      <svg className="drawer-check" width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                        <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.75.75 0 0 1 1.06-1.06L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" />
+                      </svg>
+                    )}
                   </button>
                 ))}
               </div>
+              {/* Calibration */}
+              <div className="drawer-section drawer-section--calibration">
+                <p className="drawer-section-label">Reference Pitch</p>
+                <div className="drawer-calibration">
+                  <span className="drawer-calibration-value">A4 = {referenceA4} Hz</span>
+                  <input
+                    id="a4-range"
+                    type="range"
+                    min="410"
+                    max="450"
+                    value={referenceA4}
+                    onChange={(e) => setReferenceA4(parseInt(e.target.value))}
+                    aria-label="Reference pitch A4 calibration"
+                    className="drawer-calibration-slider"
+                  />
+                </div>
+              </div>
             </div>
           </nav>
-
-          <div className="calibration-wrap">
-            <label htmlFor="a4-range">A4 = {referenceA4} Hz</label>
-            <input
-              id="a4-range"
-              type="range"
-              min="410"
-              max="450"
-              value={referenceA4}
-              onChange={(e) => setReferenceA4(parseInt(e.target.value))}
-              aria-label="Reference pitch A4 calibration"
-            />
-          </div>
-        </header>
+        </>
       )}
 
       {isStageMode && (

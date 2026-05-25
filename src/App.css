@@ -89,15 +89,80 @@ header h1::before {
   font-weight: 500;
 }
 
-/* ─── Navigation ────────────────────────────────────────────── */
-.nav-container {
-  width: 100%;
-  max-width: 560px;
-  margin-top: 20px;
+/* ─── Mode bar (compact header row) ────────────────────────── */
+.mode-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding: 8px 12px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 4px;
+  gap: 10px;
+}
+
+.mode-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-1);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mode-chip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+  flex-shrink: 0;
+}
+
+.mode-chip-tuning {
+  color: var(--text-3);
+  font-weight: 400;
+  font-size: 0.78rem;
+}
+
+/* Toggle button */
+.drawer-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.drawer-toggle:hover {
+  background: var(--surface-2);
+  border-color: var(--border-2);
+  color: var(--text-1);
+}
+
+.drawer-toggle.open {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.drawer-toggle-icon {
+  opacity: 0.7;
 }
 
 .main-modes {
@@ -816,3 +881,403 @@ footer {
   line-height: 1.7;
   border-top: 1px solid var(--border);
 }
+
+/* ─── PWA Install Banner ────────────────────────────────────── */
+
+/* Safety net: CSS-level hide when running as standalone PWA */
+@media (display-mode: standalone) {
+  .pwa-banner,
+  .pwa-ios-hint {
+    display: none !important;
+  }
+}
+
+@keyframes pwa-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pwa-banner,
+.pwa-ios-hint {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 520px;
+  z-index: 200;
+  /* Glassmorphism */
+  background: rgba(22, 27, 34, 0.88);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(47, 129, 247, 0.22);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 1px 0 rgba(255, 255, 255, 0.06) inset;
+  padding: 16px 16px 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: pwa-slide-up 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Body row */
+.pwa-banner-body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* App icon */
+.pwa-banner-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.pwa-banner-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* iOS share icon */
+.pwa-ios-share-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(47, 129, 247, 0.12);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+}
+
+/* Text block */
+.pwa-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.pwa-banner-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pwa-banner-desc {
+  font-size: 0.73rem;
+  color: var(--text-3);
+  line-height: 1.45;
+}
+
+.pwa-banner-desc strong {
+  color: var(--text-2);
+  font-weight: 600;
+}
+
+/* Install CTA button */
+.pwa-banner-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s, opacity 0.15s;
+}
+
+.pwa-banner-cta:hover {
+  background: #388bfd;
+  border-color: #388bfd;
+}
+
+.pwa-banner-cta:active {
+  transform: scale(0.97);
+}
+
+.pwa-banner-cta.loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* Spinner */
+.pwa-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: pwa-spin 0.65s linear infinite;
+}
+
+@keyframes pwa-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Dismiss button */
+.pwa-banner-dismiss {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: var(--text-3);
+  font-size: 0.75rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+  font-family: inherit;
+}
+
+.pwa-banner-dismiss:hover {
+  color: var(--text-1);
+  background: var(--surface-2);
+}
+
+/* Slightly more compact on very narrow screens */
+@media (max-width: 400px) {
+  .pwa-banner,
+  .pwa-ios-hint {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding-top: 20px;
+  }
+
+  .pwa-banner-cta {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ─── Instrument Drawer Panel ───────────────────────────────── */
+
+/* Backdrop */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 149;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0px);
+  pointer-events: none;
+  transition: background 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+.drawer-backdrop.visible {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  pointer-events: all;
+}
+
+/* Slide panel (from left) */
+.instrument-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  max-width: 85vw;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  box-shadow: 4px 0 32px rgba(0, 0, 0, 0.45);
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.instrument-drawer.open {
+  transform: translateX(0);
+}
+
+/* Drawer header */
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 16px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.drawer-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.drawer-close {
+  background: transparent;
+  border: none;
+  color: var(--text-3);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  line-height: 1;
+  transition: color 0.15s, background 0.15s;
+}
+
+.drawer-close:hover {
+  color: var(--text-1);
+  background: var(--surface-2);
+}
+
+/* Drawer scrollable body */
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.drawer-body::-webkit-scrollbar { width: 4px; }
+.drawer-body::-webkit-scrollbar-track { background: transparent; }
+.drawer-body::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+/* Section group */
+.drawer-section {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0 4px;
+}
+
+.drawer-section-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 4px 16px 6px;
+}
+
+/* Item row */
+.drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-2);
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s, color 0.12s;
+  position: relative;
+}
+
+.drawer-item:hover {
+  background: var(--surface-2);
+  color: var(--text-1);
+}
+
+.drawer-item.active {
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* Left accent bar for active item */
+.drawer-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--accent);
+}
+
+.drawer-item-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+.drawer-item-desc {
+  font-size: 0.7rem;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+}
+
+.drawer-item.active .drawer-item-desc {
+  color: rgba(47, 129, 247, 0.65);
+}
+
+.drawer-check {
+  color: var(--accent);
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+
+/* Calibration section */
+.drawer-section--calibration {
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+  padding-top: 12px;
+}
+
+.drawer-calibration {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 16px 8px;
+}
+
+.drawer-calibration-value {
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--text-2);
+  font-weight: 500;
+}
+
+.drawer-calibration-slider {
+  width: 100%;
+  height: 4px;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+
