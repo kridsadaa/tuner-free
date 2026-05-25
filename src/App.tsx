@@ -17,6 +17,7 @@ import {
 } from "./audioOutput";
 import { usePWAInstaller } from "./usePWAInstaller";
 import { PWAInstallBanner, IOSInstallHint } from "./PWAInstallBanner";
+import { ChangelogModal } from "./ChangelogModal";
 import "./App.css";
 
 type Mode = "chromatic" | "instrument";
@@ -54,11 +55,15 @@ export default function App() {
   );
   const [isStageMode, setIsStageMode] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isChangelogOpen, setIsChangelogOpen] = useState(false);
 
-  // Close drawer on Escape key
+  // Close drawer/modal on Escape key
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsDrawerOpen(false);
+      if (e.key === "Escape") {
+        setIsDrawerOpen(false);
+        setIsChangelogOpen(false);
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -166,7 +171,8 @@ export default function App() {
   const inTune = mode === "instrument" ? instrumentInTune : chromaticInTune;
 
   return (
-    <div
+    <>
+      <div
       className={`app${isStageMode ? " stage-mode" : ""}${inTune && note ? " in-tune-bg" : ""}`}
     >
       {/* ── PWA Install Portal ── */}
@@ -748,7 +754,21 @@ export default function App() {
             {" "}GitHub
           </a>
         </p>
+        <button 
+          className="footer-version-btn" 
+          onClick={() => setIsChangelogOpen(true)}
+          aria-label="View changelog"
+        >
+          v{import.meta.env.APP_VERSION || "1.0.0"} 
+          <span className="footer-timestamp">({import.meta.env.APP_BUILD_TIME || "Latest"})</span>
+        </button>
       </footer>
     </div>
-  );
+
+    <ChangelogModal 
+      isOpen={isChangelogOpen} 
+      onClose={() => setIsChangelogOpen(false)} 
+    />
+  </>
+);
 }

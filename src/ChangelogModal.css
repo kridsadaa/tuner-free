@@ -1,0 +1,131 @@
+.footer-version-btn {
+  background: none;
+  border: none;
+  color: var(--text-3);
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  margin-top: 12px;
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.footer-version-btn:hover {
+  background: var(--surface-2);
+  color: var(--text-2);
+}
+
+.footer-timestamp {
+  opacity: 0.7;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(1, 4, 9, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.modal-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  animation: slideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-header h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-1);
+  margin: 0;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-3);
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.modal-close-btn:hover {
+  color: var(--text-1);
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.changelog-version-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.changelog-version-header h3 {
+  font-size: 1.2rem;
+  color: var(--accent);
+  margin: 0;
+}
+
+.changelog-date {
+  font-size: 0.8rem;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+}
+
+.changelog-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.changelog-list li {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--text-2);
+  padding-left: 16px;
+  position: relative;
+}
+
+.changelog-list li::before {
+  content: '•';
+  color: var(--accent);
+  position: absolute;
+  left: 0;
+  font-weight: bold;
+}
+
+.changelog-list li strong {
+  color: var(--text-1);
+}
