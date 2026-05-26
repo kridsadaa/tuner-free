@@ -966,6 +966,12 @@ footer {
   gap: 36px;
 }
 
+.seo-static-content {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
 .seo-content article {
   display: flex;
   flex-direction: column;
