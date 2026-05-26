@@ -39,11 +39,20 @@ const evalInstruments = new Function(cleanedTunings + '; return INSTRUMENTS;');
 const instruments = evalInstruments();
 console.log(`Successfully parsed ${instruments.length} instruments for prerendering.`);
 
+// Parse seoData.ts
+console.log("Parsing seoData from seoData.ts...");
+const seoDataPath = path.resolve(__dirname, '../src/seoData.ts');
+const seoDataContent = fs.readFileSync(seoDataPath, 'utf-8');
+const cleanedSeoData = seoDataContent
+  .replace(/export\s+const\s+seoData.*=/g, 'const seoData =');
+const evalSeoData = new Function(cleanedSeoData + '; return seoData;');
+const seoData = evalSeoData();
+
 // ── 2. Extract SEO content from App.tsx ─────────────────────────────────────
 console.log("Extracting SEO content from App.tsx...");
 const appContent = fs.readFileSync(appPath, 'utf-8');
 let seoHtml = '';
-const startIndex = appContent.indexOf('<section className="seo-content">');
+const startIndex = appContent.indexOf('<div className="seo-static-content">');
 if (startIndex !== -1) {
   const subContent = appContent.substring(startIndex);
   const mainIndex = subContent.indexOf('</main>');
@@ -51,14 +60,27 @@ if (startIndex !== -1) {
     const seoSegment = subContent.substring(0, mainIndex);
     const lastSectionClose = seoSegment.lastIndexOf('</section>');
     if (lastSectionClose !== -1) {
-      seoHtml = seoSegment.substring(0, lastSectionClose + 10).replace(/className=/g, 'class=');
-      console.log("Successfully extracted SEO content.");
+      seoHtml = seoSegment.substring(0, lastSectionClose).replace(/className=/g, 'class=');
+      console.log("Successfully extracted static SEO content.");
     }
   }
 }
 
 if (!seoHtml) {
-  console.warn("Warning: Could not find seo-content section in App.tsx!");
+  console.warn("Warning: Could not find seo-static-content div in App.tsx!");
+}
+
+function renderFullSeoContent(instId) {
+  const data = seoData[instId || 'chromatic'];
+  return `
+    <section class="seo-content">
+      <article class="seo-intro">
+        <h2>${data.title}</h2>
+        <p>${data.desc}</p>
+      </article>
+      ${seoHtml}
+    </section>
+  `;
 }
 
 
@@ -269,7 +291,7 @@ function renderChromaticPage(instrumentsList, seoCopyHtml) {
         ${renderSeoNavigation(instrumentsList, null)}
         ${renderReferenceTones('chromatic')}
         ${renderMetronome()}
-        ${seoCopyHtml}
+        ${renderFullSeoContent(null)}
       </main>
       ${renderFooter()}
     </div>
@@ -288,7 +310,7 @@ function renderInstrumentPage(inst, instrumentsList, seoCopyHtml) {
         ${renderSeoNavigation(instrumentsList, inst.id)}
         ${renderReferenceTones('instrument')}
         ${renderMetronome()}
-        ${seoCopyHtml}
+        ${renderFullSeoContent(inst.id)}
       </main>
       ${renderFooter()}
     </div>

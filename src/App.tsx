@@ -9,6 +9,7 @@ import {
   type Instrument,
   type Tuning,
 } from "./tunings";
+import { seoData } from "./seoData";
 import {
   playTone,
   stopTone,
@@ -624,15 +625,15 @@ export default function App() {
 
         {!isStageMode && (
           <section className="seo-content">
-            <article>
-              <h2>Free Online Instrument Tuner</h2>
+            <article className="seo-intro">
+              <h2>{mode === 'chromatic' ? seoData.chromatic.title : (seoData[selectedInstrument.id]?.title || seoData.chromatic.title)}</h2>
               <p>
-                Tune your Guitar, Violin, Bass, Ukulele, Cello, and traditional
-                Thai instruments directly in your browser — no app download
-                needed. Tuner Free uses high-precision pitch detection to help
-                you achieve perfect intonation in real time.
+                {mode === 'chromatic' ? seoData.chromatic.desc : (seoData[selectedInstrument.id]?.desc || seoData.chromatic.desc)}
               </p>
-              <ul className="feature-list">
+            </article>
+            <div className="seo-static-content">
+              <article>
+                <ul className="feature-list">
                 <li>
                   <strong>Accurate:</strong> Precision within 1 cent using the
                   Pitchy algorithm.
@@ -740,6 +741,7 @@ export default function App() {
                 </p>
               </details>
             </article>
+            </div>
           </section>
         )}
       </main>
