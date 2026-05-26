@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tuner-free.vercel.app/sitemap.xml
+Sitemap: https://tuner-free.kridsada-bun.com/sitemap.xml

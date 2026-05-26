@@ -344,10 +344,10 @@ for (const inst of instruments) {
     .replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${desc}"`)
     .replace(/<meta property="og:title" content="[^"]*"/, `<meta property="og:title" content="${title}"`)
     .replace(/<meta property="og:description" content="[^"]*"/, `<meta property="og:description" content="${desc}"`)
-    .replace(/<meta property="og:url" content="[^"]*"/, `<meta property="og:url" content="https://tuner-free.vercel.app/${inst.id}"`)
+    .replace(/<meta property="og:url" content="[^"]*"/, `<meta property="og:url" content="https://tuner-free.kridsada-bun.com/${inst.id}"`)
     .replace(/<meta name="twitter:title" content="[^"]*"/, `<meta name="twitter:title" content="${title}"`)
     .replace(/<meta name="twitter:description" content="[^"]*"/, `<meta name="twitter:description" content="${desc}"`)
-    .replace(/<link rel="canonical" href="[^"]*"/, `<link rel="canonical" href="https://tuner-free.vercel.app/${inst.id}"`)
+    .replace(/<link rel="canonical" href="[^"]*"/, `<link rel="canonical" href="https://tuner-free.kridsada-bun.com/${inst.id}"`)
     .replace('<div id="root"></div>', `<div id="root">${pageHtml}</div>`);
 
   fs.writeFileSync(path.join(dir, 'index.html'), newHtml);
@@ -365,7 +365,7 @@ fs.writeFileSync(indexPath, optimizedIndexHtml);
 console.log("Main dist/index.html optimized.");
 
 // ── 6. Generate Sitemap ─────────────────────────────────────────────────────
-const baseUrl = "https://tuner-free.vercel.app";
+const baseUrl = "https://tuner-free.kridsada-bun.com";
 let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>

@@ -2,7 +2,7 @@
 
 > Free online chromatic instrument tuner — no ads, no sign-up, no downloads.
 
-**Live:** [https://tuner-free.vercel.app/](https://tuner-free.vercel.app/)
+**Live:** [https://tuner-free.kridsada-bun.com/](https://tuner-free.kridsada-bun.com/)
 
 ---
 

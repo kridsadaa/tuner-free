@@ -94,7 +94,7 @@ export default function App() {
     if (titleEl) titleEl.textContent = newTitle;
     if (metaDesc) metaDesc.setAttribute("content", newDesc);
     if (ogTitle) ogTitle.setAttribute("content", newTitle);
-    if (ogUrl) ogUrl.setAttribute("content", `https://tuner-free.vercel.app${newUrl}`);
+    if (ogUrl) ogUrl.setAttribute("content", `https://tuner-free.kridsada-bun.com${newUrl}`);
   }, [mode, selectedInstrument]);
 
   // Handle browser back/forward
