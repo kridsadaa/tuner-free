@@ -54,9 +54,39 @@ header {
   width: 100%;
   max-width: 560px;
   text-align: center;
-  padding: 32px 0 20px;
+  padding: 24px 0 20px;
   border-bottom: 1px solid var(--border);
   margin-bottom: 4px;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.hamburger-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-2);
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s, color 0.15s;
+  margin-left: -8px;
+}
+
+.hamburger-btn:hover {
+  background: var(--surface-2);
+  color: var(--text-1);
+}
+
+.header-spacer {
+  width: 40px;
 }
 
 header h1 {
@@ -130,40 +160,7 @@ header h1::before {
   font-size: 0.78rem;
 }
 
-/* Toggle button */
-.drawer-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--text-2);
-  font-size: 0.75rem;
-  font-weight: 600;
-  font-family: inherit;
-  letter-spacing: 0.03em;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
-}
-
-.drawer-toggle:hover {
-  background: var(--surface-2);
-  border-color: var(--border-2);
-  color: var(--text-1);
-}
-
-.drawer-toggle.open {
-  background: var(--accent-dim);
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.drawer-toggle-icon {
-  opacity: 0.7;
-}
+/* removed drawer toggle */
 
 .main-modes {
   display: flex;
@@ -1336,6 +1333,19 @@ footer {
   color: var(--text-3);
   text-transform: uppercase;
   letter-spacing: 0.12em;
+}
+
+.drawer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.drawer-title-brand {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-1);
+  letter-spacing: -0.01em;
 }
 
 .drawer-close {
