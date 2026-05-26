@@ -748,6 +748,9 @@ export default function App() {
         <p className="footer-copyright">
           &copy; {new Date().getFullYear()} Tuner Free · Free Online Chromatic Tuner
         </p>
+        <p className="footer-credit" style={{ marginTop: '0.5rem', marginBottom: '1rem', color: 'var(--text-2)', fontSize: '0.8rem', lineHeight: '1.4', maxWidth: '600px', margin: '0.5rem auto 1rem' }}>
+          Tuner Free: โปรเจกต์มหาชนเพื่อนักดนตรี รวมระบบเครื่องตั้งสายกีตาร์ เครื่องตั้งสายไวโอลิน และเครื่องตั้งสายซออู้/ซอด้วง ไว้ในที่เดียว รันระบบแบบโฮสต์ในเครื่อง ปราศจากโฆษณาคั่น
+        </p>
         <p className="footer-credit">
           Created by{" "}
           <a
